@@ -8,6 +8,8 @@
 #ifndef DRV_COMMON_COMMON_H_
 #define DRV_COMMON_COMMON_H_
 
+#include "stm32f4xx_hal.h"
+
 /*! @brief Status return codes.
  * Error codes will be a unified enumeration that will contain all error codes.
  * There will be separate regions, each of 256 positions will be allocated per functionality.
