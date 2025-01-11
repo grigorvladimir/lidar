@@ -92,7 +92,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C3_Init();
   /* USER CODE BEGIN 2 */
-  status =  i2c_init(&hi2c3);
+  status =  I2c_init(&hi2c3);
   uint8_t check;
 
   /* USER CODE END 2 */
@@ -105,7 +105,7 @@ int main(void)
 	  HAL_Delay(500);
 
 	  //HAL_I2C_Mem_Read(&hi2c3, (0x29 << 1) | 0x01, 0xc0, 1, &check, 1, 50);
-	  i2c_read_addr8_data8(0xc0, &check);
+	  I2c_read_addr8_data8(0xc0, &check);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
