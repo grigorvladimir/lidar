@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "I2c.h"
 #include "Vl53l0x.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -103,11 +104,13 @@ int main(void)
   while (1)
   {
 	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	  HAL_Delay(500);
+
 
 	  //HAL_I2C_Mem_Read(&hi2c3, (0x29 << 1) | 0x01, 0xc0, 1, &check, 1, 50);
 	  //I2c_read_addr8_data8(0xc0, &check);
 	  Read_range(&check);
+	  printf("range = %d\n", check);
+	  //HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -262,7 +265,11 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+int _write(int file, char *ptr, int len)
+{
+	HAL_UART_Transmit(&huart2, (uint8_t*)ptr, len, HAL_MAX_DELAY);
+  return len;
+}
 /* USER CODE END 4 */
 
 /**
