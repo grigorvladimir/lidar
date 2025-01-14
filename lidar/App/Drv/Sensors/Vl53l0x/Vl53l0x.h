@@ -9,11 +9,12 @@
 #define DRV_SENSORS_VL53L0X_VL53L0X_H_
 
 #include "Common.h"
+#include "I2c.h"
 
 #define OUT_OF_RANGE (8190U)
 
 /*Initialization registor map*/
-#define REG_IDENTIFICATION_MODEL_ID (0xC0)
+#define REG_IDENTIFICATION_MODEL_ID (0xC0)/* Should equal to EXPECTED_DEVICE_ID */
 #define REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV (0x89)
 #define REG_MSRC_CONFIG_CONTROL (0x60)
 #define REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT (0x44)
@@ -36,6 +37,13 @@
 #define RANGE_SEQUENCE_STEP_PRE_RANGE (0x40)
 #define RANGE_SEQUENCE_STEP_FINAL_RANGE (0x80)
 
+#define EXPECTED_DEVICE_ID (0xEE)
+
+typedef enum
+{
+    CALIBRATION_TYPE_VHV,
+    CALIBRATION_TYPE_PHASE
+} calibration_type_t;
 /*Sensor initialization*/
 status_t Vl53l0x_init();
 

@@ -8,6 +8,8 @@
 #ifndef DRV_COMMON_COMMON_H_
 #define DRV_COMMON_COMMON_H_
 
+#include "stdbool.h"
+
 #include "stm32f4xx_hal.h"
 
 /*! @brief Status return codes.
@@ -24,6 +26,10 @@ typedef enum
 	STATUS_UNSUPPORTED                     = 0x004U,    /*!< Generic operation unsupported status */
 }status_t;
 
+/**
+ * Mirroring any array.
+ */
+void Mirror_array(uint8_t *arr, uint32_t size);
 
 
 #endif /* DRV_COMMON_COMMON_H_ */

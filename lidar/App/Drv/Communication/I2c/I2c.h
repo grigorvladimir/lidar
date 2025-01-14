@@ -18,8 +18,9 @@
 status_t I2c_init(I2C_HandleTypeDef *hi2c);
 
 /*I2c wraper functions*/
-status_t I2c_write_addr8_data8(uint8_t addr, uint8_t *data);
+status_t I2c_write_addr8_data8(uint8_t addr, uint8_t data);
 status_t I2c_read_addr8_data8(uint8_t addr, uint8_t *data);
+status_t I2c_read_addr8_data16(uint8_t addr, uint16_t *data);
 
 
 
