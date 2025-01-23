@@ -3,6 +3,11 @@
  *
  *  Created on: Jan 10, 2025
  *      Author: grigorian
+ *
+ * Order of initialization and values to fill with
+ * were referenced from stm provided API.
+ * Main initialization siquence can be found in vl53l0x_core.h.
+ * Defines are mainly in vl53l0x_device.h.
  */
 #include "Vl53l0x.h"
 
@@ -10,7 +15,6 @@ static uint8_t stop_variable = 0;
 
 /**
  * We can read the model id to confirm that the device is booted.
- * (There is no fresh_out_of_reset as on the vl6180x)
  */
 static status_t check_dev()
 {
@@ -64,7 +68,12 @@ static status_t data_init()
     return status;
 }
 
-static status_t load_default_settings()
+/*!
+ * @brief Fill setting registers.
+ *
+ * Filling registers with settings for long range measurement.
+ */
+static status_t load_settings()
 {
 	status_t status = STATUS_ERROR;
     bool settings_applied = I2c_write_addr8_data8(0xFF, 0x01);
@@ -81,7 +90,7 @@ static status_t load_default_settings()
     settings_applied |= I2c_write_addr8_data8(0x48, 0x00);
     settings_applied |= I2c_write_addr8_data8(0x30, 0x20);
     settings_applied |= I2c_write_addr8_data8(0xFF, 0x00);
-    settings_applied |= I2c_write_addr8_data8(0x30, 0x09);
+    settings_applied |= I2c_write_addr8_data8(0x30, 0x07);
     settings_applied |= I2c_write_addr8_data8(0x54, 0x00);
     settings_applied |= I2c_write_addr8_data8(0x31, 0x04);
     settings_applied |= I2c_write_addr8_data8(0x32, 0x03);
@@ -93,7 +102,7 @@ static status_t load_default_settings()
     settings_applied |= I2c_write_addr8_data8(0x51, 0x00);
     settings_applied |= I2c_write_addr8_data8(0x52, 0x96);
     settings_applied |= I2c_write_addr8_data8(0x56, 0x08);
-    settings_applied |= I2c_write_addr8_data8(0x57, 0x30);
+    settings_applied |= I2c_write_addr8_data8(0x57, 0x50);
     settings_applied |= I2c_write_addr8_data8(0x61, 0x00);
     settings_applied |= I2c_write_addr8_data8(0x62, 0x00);
     settings_applied |= I2c_write_addr8_data8(0x64, 0x00);
@@ -130,7 +139,7 @@ static status_t load_default_settings()
     settings_applied |= I2c_write_addr8_data8(0x44, 0x00);
     settings_applied |= I2c_write_addr8_data8(0x45, 0x20);
     settings_applied |= I2c_write_addr8_data8(0x47, 0x08);
-    settings_applied |= I2c_write_addr8_data8(0x48, 0x28);
+    settings_applied |= I2c_write_addr8_data8(0x48, 0x48);
     settings_applied |= I2c_write_addr8_data8(0x67, 0x00);
     settings_applied |= I2c_write_addr8_data8(0x70, 0x04);
     settings_applied |= I2c_write_addr8_data8(0x71, 0x01);
@@ -192,7 +201,7 @@ static status_t set_sequence_steps_enabled(uint8_t sequence_step)
  */
 static status_t static_init()
 {
-	status_t status = load_default_settings();
+	status_t status = load_settings();
     if(status == STATUS_SUCCESS)
     {
     	status = configure_interrupt();
