@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "I2c.h"
 #include "Vl53l0x.h"
+#include "Tb6560step.h"
 #include "stdio.h"
 /* USER CODE END Includes */
 
@@ -95,22 +96,24 @@ int main(void)
   /* USER CODE BEGIN 2 */
   I2c_init(&hi2c3);
   Vl53l0x_init();
-  uint16_t check;
-
+  Motor_init();
+  uint16_t check = 0;
+  int16_t angle = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	if((angle < -1800) || (angle > 1800))
+	{
+		Motor_switch_direction();
+	}
 
+	Motor_step_big(&angle);
+	Read_range(&check);
+	printf("range = %d	angle = %d\n", check, angle);
 
-	  //HAL_I2C_Mem_Read(&hi2c3, (0x29 << 1) | 0x01, 0xc0, 1, &check, 1, 50);
-	  //I2c_read_addr8_data8(0xc0, &check);
-	  Read_range(&check);
-	  printf("range = %d\n", check);
-	  //HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -247,7 +250,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8|GPIO_PIN_9, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -255,12 +258,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LD2_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin;
+  /*Configure GPIO pins : PB8 PB9 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
